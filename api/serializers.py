@@ -16,4 +16,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class  JournalEntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model =  JournalEntry
-        fields = ['url', 'title', 'location', 'body', 'user_id']
+        fields = ['url', 'title', 'location', 'body', 'user_id', 'images']
