@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import JournalEntries
+from . import views
 
 urlpatterns = [
-    path('', JournalEntries)
-    #path('', getData),
+    path('journalentries/', views.journal_entries),
+    path('journalentry/', views.journal_entry),
+    path('images/', views.images),
+    path('register/', views.register_user, name='register_user'),
+    path('login/', views.login_user, name='login_user'),
+    path('logout/', views.logout_user, name='logout_user'),
 ]
