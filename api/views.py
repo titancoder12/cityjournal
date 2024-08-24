@@ -5,7 +5,7 @@ from .serializers import JournalEntrySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 
 @api_view(['GET'])
 def JournalEntries(request):
