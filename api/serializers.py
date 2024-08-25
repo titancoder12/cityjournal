@@ -11,18 +11,10 @@ class  JournalEntrySerializer(serializers.ModelSerializer):
         model =  JournalEntry
         fields = '__all__'
 
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
-
 class  ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model =  Image
         fields = '__all__'
-    
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -34,7 +26,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email'],
             password=validated_data['password']
         )
         return user

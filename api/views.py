@@ -53,8 +53,10 @@ Get all journal entries for a current user
 @permission_classes([IsAuthenticated])
 def journal_entries(request):
     limit = int(request.query_params.get('limit', len(JournalEntry.objects.all())))
-    id = request.user.id
-    entries = JournalEntry.objects.filter(id=id).order_by('-date')[:limit]
+    user_id = request.user.id
+    entries = JournalEntry.objects.filter(user_id=user_id).order_by('-id')[:limit]
+    print(entries)
+    print(limit)
 
     if not bool(entries):
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -79,14 +81,23 @@ def journal_entry(request):
         except JournalEntry.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        if entry.user_id != request.user.id:
+        try:
+            entry = JournalEntry.objects.get(id=id, user_id=request.user.id)
+        except JournalEntry.DoesNotExist:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         serializer = JournalEntrySerializer(entry, context={'request': request})
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = JournalEntrySerializer(data=request.data, context={'request': request})
+        data = request.data.copy()
+        data['user_id'] = request.user.id
+
+        serializer = JournalEntrySerializer(data=data)
+        
+        #if request.user.id != data['user_id']:
+        #    return Response(status=status.HTTP_403_FORBIDDEN)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
