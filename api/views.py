@@ -116,12 +116,12 @@ def images(request):
         if entry_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            images = Image.objects.filter(entry_id=entry_id)
-        except Image.DoesNotExist:
+        images = Image.objects.filter(entry_id=entry_id)
+        
+        if not images:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if request.user.id != images[0].entry.user_id:
+        if request.user.id != JournalEntry.objects.get(id=images[0].entry_id.id).user_id.id:
             return Response(status=status.HTTP_403_FORBIDDEN)
         
         serializer = ImageSerializer(images, many=True, context={'request': request})
