@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group, User
-from .models import JournalEntry
+from .models import JournalEntry, Image
 from rest_framework import serializers
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -11,10 +11,18 @@ class  JournalEntrySerializer(serializers.ModelSerializer):
         model =  JournalEntry
         fields = '__all__'
 
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
 class  ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  JournalEntry
+        model =  Image
         fields = '__all__'
+    
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
