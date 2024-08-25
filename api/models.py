@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class JournalEntry(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     location = models.JSONField()
