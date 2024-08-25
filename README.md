@@ -83,7 +83,7 @@ user_id: Integer
 
 **id** (integer) - Id of the entry
 
-**entry_id **(Integer) - Id of the entry
+**entry_id** (Integer) - Id of the entry
 
 **user_id** (Integer) - The id of the user creating the entry
 
@@ -206,9 +206,9 @@ Add an entry (POST)
 
 **limit** (Integer, default=all) - Number of entries to return
 
-**user_id **(Integer) - Id of the user
+**user_id** (Integer) - Id of the user
 
-**entry_id **(Integer) - Id of the entry
+**entry_id** (Integer) - Id of the entry
 
 **entries** (Dictionary) - Dictionary. The first and only row contains a value containing a list of all entries, where each individual entry is another dictionary.
 
@@ -256,7 +256,7 @@ password: String
 
 **username** (String) - Username of the user-to-be
 
-**email **(String) - Email of the user-to-be
+**email** (String) - Email of the user-to-be
 
 **password** (String) - Password of the user-to-be
 
@@ -292,7 +292,7 @@ password: String
 
 **password** (String) - Password of the user-to-be
 
-**token **(Integer) - User token for authentication \
+**token** (Integer) - User token for authentication \
 
 
 
