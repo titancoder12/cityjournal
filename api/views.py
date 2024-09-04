@@ -1,8 +1,8 @@
 from .models import JournalEntry, Image
-from .serializers import JournalEntrySerializer, ImageSerializer, UserRegistrationSerializer
+from .serializers import JournalEntrySerializer, ImageSerializer, UserRegistrationSerializer, UserLoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
@@ -116,6 +116,7 @@ class journal_entry(APIView):
         id = request.query_params.get('id', None)
         if id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         try:
             entry = JournalEntry.objects.get(id=id)
         except JournalEntry.DoesNotExist:
@@ -128,6 +129,7 @@ class journal_entry(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @api_view(['GET', 'POST'])
@@ -160,9 +162,10 @@ class images(APIView):
         entry_id = request.query_params.get("entry_id", None)
         if entry_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        try:
-            images = Image.objects.filter(entry_id=entry_id)
-        except Image.DoesNotExist:
+
+        images = Image.objects.filter(entry_id=entry_id)
+        
+        if not images:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = self.get_serializer(images, many=True, context={'request': request})
         return Response(serializer.data)
@@ -170,6 +173,7 @@ class images(APIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
